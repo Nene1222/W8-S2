@@ -1,45 +1,118 @@
 import 'package:flutter/material.dart';
 
+enum ButtonType { primary, secondary, disabled }
+
 class CustomButton extends StatelessWidget {
   final String label;
-  final IconData? icon;
-  final bool isEnabled;
+  final IconData icon;
+  final ButtonType buttonType;
+  final IconPosition iconPosition;
 
   const CustomButton({
-    Key? key,
-    this.label = 'Submit',
-    this.icon,
-    this.isEnabled = true,
-  }) : super(key: key);
-
-  Color _getButtonColor() {
-    switch (label.toLowerCase()) {
-      case 'primary':
-        return Colors.blue;
-      case 'secondary':
-        return Colors.green;
-      case 'disabled':
-        return Colors.grey;
-      default:
-        return Colors.blue;
-    }
-  }
+    required this.label,
+    required this.icon,
+    this.buttonType = ButtonType.primary,
+    this.iconPosition = IconPosition.left,
+  });
 
   @override
   Widget build(BuildContext context) {
-    return ElevatedButton(
-      onPressed: isEnabled ? () {} : null,
-      style: ButtonStyle(
-        backgroundColor: MaterialStateProperty.all<Color>(_getButtonColor()),
-        foregroundColor: MaterialStateProperty.all<Color>(Colors.white),
+    final buttonColor = _getButtonColor(buttonType);
+    final iconColor = _getIconColor(buttonType);
+
+    return Container(
+      decoration: BoxDecoration(
+        color: buttonColor,
+        borderRadius: BorderRadius.circular(8.0),
       ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          if (icon != null) Icon(icon),
-          SizedBox(width: 8),
-          Text(label),
-        ],
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 12.0, horizontal: 16.0),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            if (iconPosition == IconPosition.left) ...[
+              Icon(icon, color: iconColor, size: 20.0),
+              const SizedBox(width: 8.0),
+            ],
+            Text(
+              label,
+              style: TextStyle(
+                color: iconColor,
+                fontWeight: FontWeight.bold,
+                fontSize: 16.0,
+              ),
+            ),
+            if (iconPosition == IconPosition.right) ...[
+              const SizedBox(width: 8.0),
+              Icon(icon, color: iconColor, size: 20.0),
+            ],
+          ],
+        ),
+      ),
+    );
+  }
+
+  Color _getButtonColor(ButtonType type) {
+    switch (type) {
+      case ButtonType.primary:
+        return Colors.blue;
+      case ButtonType.secondary:
+        return Colors.green;
+      case ButtonType.disabled:
+        return Colors.grey.withOpacity(0.3);
+    }
+  }
+
+  Color _getIconColor(ButtonType type) {
+    switch (type) {
+      case ButtonType.primary:
+      case ButtonType.secondary:
+        return Colors.white;
+      case ButtonType.disabled:
+        return Colors.grey;
+    }
+  }
+}
+
+enum IconPosition { left, right }
+
+void main() {
+  runApp(MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Custom Buttons',
+      home: Scaffold(
+        appBar: AppBar(
+          title: Text('Custom Buttons'),
+        ),
+        body: Center(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              CustomButton(
+                label: 'Submit',
+                icon: Icons.check,
+                buttonType: ButtonType.primary,
+              ),
+              const SizedBox(height: 16.0),
+              CustomButton(
+                label: 'Time',
+                icon: Icons.access_time,
+                buttonType: ButtonType.secondary,
+              ),
+              const SizedBox(height: 16.0, width:123.0),
+              CustomButton(
+                label: 'Account',
+                icon: Icons.account_circle,
+                buttonType: ButtonType.disabled,
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }
