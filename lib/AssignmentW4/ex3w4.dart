@@ -21,6 +21,7 @@ class CustomButton extends StatelessWidget {
     final iconColor = _getIconColor(buttonType);
 
     return Container(
+      width: 200, // Set the width to make the button longer
       decoration: BoxDecoration(
         color: buttonColor,
         borderRadius: BorderRadius.circular(8.0),
@@ -29,6 +30,7 @@ class CustomButton extends StatelessWidget {
         padding: const EdgeInsets.symmetric(vertical: 12.0, horizontal: 16.0),
         child: Row(
           mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment: MainAxisAlignment.center, // Center content
           children: [
             if (iconPosition == IconPosition.left) ...[
               Icon(icon, color: iconColor, size: 20.0),
@@ -55,11 +57,11 @@ class CustomButton extends StatelessWidget {
   Color _getButtonColor(ButtonType type) {
     switch (type) {
       case ButtonType.primary:
-        return Colors.blue;
+        return const Color.fromARGB(255, 118, 223, 255);
       case ButtonType.secondary:
-        return Colors.green;
+        return const Color.fromARGB(255, 56, 144, 59);
       case ButtonType.disabled:
-        return Colors.grey.withOpacity(0.3);
+        return const Color.fromARGB(255, 234, 203, 52).withOpacity(0.3);
     }
   }
 
@@ -104,7 +106,7 @@ class MyApp extends StatelessWidget {
                 icon: Icons.access_time,
                 buttonType: ButtonType.secondary,
               ),
-              const SizedBox(height: 16.0, width:123.0),
+              const SizedBox(height: 16.0),
               CustomButton(
                 label: 'Account',
                 icon: Icons.account_circle,

@@ -1,141 +1,132 @@
 import 'package:flutter/material.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
-
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Weather Forecast',
-      home: Scaffold(
-        appBar: AppBar(
-          title: const Text('Weather Forecast'),
-        ),
-        body: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: GridView.count(
-            crossAxisCount: 5,
-            crossAxisSpacing: 12.0,
-            mainAxisSpacing: 12.0,
-            children: const [
-              WeatherForecastWidget(
-                weatherCondition: 'Sunny',
-                tempMin: 15,
-                tempMax: 25,
-                dayOfWeek: 'Sun',
-              ),
-              WeatherForecastWidget(
-                weatherCondition: 'Rainy',
-                tempMin: 12,
-                tempMax: 20,
-                dayOfWeek: 'Mon',
-              ),
-              WeatherForecastWidget(
-                weatherCondition: 'Cloudy',
-                tempMin: 9,
-                tempMax: 18,
-                dayOfWeek: 'Tue',
-              ),
-              WeatherForecastWidget(
-                weatherCondition: 'Snowy',
-                tempMin: 8,
-                tempMax: 15,
-                dayOfWeek: 'Wed',
-              ),
-              WeatherForecastWidget(
-                weatherCondition: 'Sunny',
-                tempMin: 5,
-                tempMax: 10,
-                dayOfWeek: 'Thu',
-              ),
-            ],
-          ),
+      home: WeatherForecast(),
+    );
+  }
+}
+
+class WeatherForecast extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Weather Forecast'),
+      ),
+      body: Padding(
+        padding: EdgeInsets.all(24.0),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            WeatherCard(
+              day: 'Sun',
+              temperature: '15°',
+              icon: Icons.sunny,
+              iconColor: Colors.yellow, // Set the sunny icon color to yellow
+            ),
+            WeatherCard(
+              day: 'Mon',
+              temperature: '8°',
+              icon: Icons.water_drop,
+              iconColor: Colors.lightBlue, // Set the cloud icon color to grey
+            ),
+            WeatherCard(
+              day: 'Tue',
+              temperature: '9°',
+              icon: Icons.cloud_queue,
+              iconColor: Colors.grey, // Set the cloud icon color to grey
+            ),
+            WeatherCard(
+              day: 'Wed',
+              temperature: '8°',
+              icon: Icons.cloud_queue,
+              iconColor: Colors.grey, // Set the cloud icon color to grey
+            ),
+            WeatherCard(
+              day: 'Thu',
+              temperature: '-4°',
+              icon: Icons.ac_unit_rounded,
+              iconColor:Color.fromARGB(255, 118, 223, 255), // Set the cloud icon color to grey
+            ),
+            WeatherCard(
+              day: 'Fri',
+              temperature: '4°',
+              icon: Icons.cloud_queue,
+              iconColor: Colors.grey, // Set the cloud icon color to grey
+            ),
+            WeatherCard(
+              day: 'Sat',
+              temperature: '3°',
+              icon: Icons.sunny,
+              iconColor: Color.fromARGB(255, 234, 203, 52).withOpacity(0.3), // Set the sunny icon color to yellow
+            ),
+          ],
         ),
       ),
     );
   }
 }
 
-class WeatherForecastWidget extends StatelessWidget {
-  final String weatherCondition;
-  final int tempMin;
-  final int tempMax;
-  final String dayOfWeek;
+class WeatherCard extends StatelessWidget {
+  final String day;
+  final String temperature;
+  final IconData icon;
+  final Color iconColor;
 
-  const WeatherForecastWidget({
-    Key? key,
-    required this.weatherCondition,
-    required this.tempMin,
-    required this.tempMax,
-    required this.dayOfWeek,
-  }) : super(key: key);
+  const WeatherCard({
+    required this.day,
+    required this.temperature,
+    required this.icon,
+    required this.iconColor,
+  });
 
   @override
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        color: Colors.white,
-        border: Border.all(color: const Color(0xFF87CEEB), width: 1), // Soft blue color
-        borderRadius: BorderRadius.circular(8),
+        border: Border.all(
+          color: Colors.grey,
+          width: 2.3,
+        ),
+        borderRadius: BorderRadius.circular(16.0),
       ),
-      padding: const EdgeInsets.all(12.0),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Text(
-            dayOfWeek,
-            style: const TextStyle(
-              fontSize: 16.0,
-              fontWeight: FontWeight.bold,
+      child: Padding(
+        padding: EdgeInsets.all(20.0),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              day,
+              style: TextStyle(
+                fontSize: 18.0,
+                fontWeight: FontWeight.bold,
+              ),
             ),
-          ),
-          const SizedBox(height: 8.0),
-          _getWeatherIcon(weatherCondition),
-          const SizedBox(height: 8.0),
-          Text(
-            '$tempMin°/$tempMax°',
-            style: const TextStyle(
-              fontSize: 16.0,
-              fontWeight: FontWeight.bold,
+            SizedBox(height: 8.0),
+            Icon(
+              icon,
+              size: 40.0,
+              color: iconColor, // Use the provided iconColor
             ),
-          ),
-        ],
+            SizedBox(height: 8.0),
+            Text(
+              temperature,
+              style: TextStyle(
+                fontSize: 18.0,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ],
+        ),
       ),
     );
-  }
-
-  Widget _getWeatherIcon(String condition) {
-    switch (condition.toLowerCase()) {
-      case 'sunny':
-        return const Icon(
-          Icons.wb_sunny,
-          size: 40.0,
-          color: Colors.yellow,
-        );
-      case 'rainy':
-        return const Icon(
-          Icons.water_drop,
-          size: 40.0,
-          color: Colors.blue,
-        );
-      case 'cloudy':
-        return const Icon(
-          Icons.cloud,
-          size: 40.0,
-          color: Colors.grey,
-        );
-      case 'snowy':
-        return const Icon(
-          Icons.ac_unit,
-          size: 40.0,
-          color: Color.fromARGB(255, 121, 240, 251),
-        );
-      default:
-        return const SizedBox.shrink();
-    }
   }
 }
